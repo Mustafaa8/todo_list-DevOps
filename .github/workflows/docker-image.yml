@@ -20,6 +20,7 @@ jobs:
     - name: Build the Docker image
       run: |
         docker build . --file Dockerfile --tag ${{ vars.DOCKER_USERNAME }}/todo_list:$(date +%s)
+        docker push ${{ vars.DOCKER_USERNAME }}/todo_list:$(date +%s)
     - name: logout
       run: |
         docker logout
