@@ -1,6 +1,8 @@
-FROM node:slim
+FROM node:20.12.2-slim
 WORKDIR /app
 COPY package* .
-RUN npm ci && npm cache clean --force
+RUN npm ci --only=production && npm cache clean --force
 COPY . .
-USER nodeUser
+USER node
+EXPOSE 4000
+CMD [ "npm","start" ]
