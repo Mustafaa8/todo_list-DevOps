@@ -16,7 +16,7 @@ jobs:
     - uses: actions/checkout@v4
     - name: logging in
       run: |
-        echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username ${{ vars.DOCKER_USERNAME }} --pasword-stdin 
+        echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username ${{ vars.DOCKER_USERNAME }} --password-stdin 
     - name: Build the Docker image
       run: |
         docker build . --file Dockerfile --tag ${{ vars.DOCKER_USERNAME }}/todo_list:$(date +%s)
