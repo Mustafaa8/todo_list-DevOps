@@ -36,3 +36,20 @@ jobs:
     - name: logout
       run: |
         docker logout
+  scanning_image:
+    name: Scanning Image For Vulnerabilities 
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - name: logging in
+        run: |
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username ${{ vars.DOCKER_USERNAME }} --password-stdin 
+      - name: scanning the Docker image
+        uses: aquasecurity/trivy-action@dc5a429b52fcf669ce959baa2c2dd26090d2a6c4
+        with: 
+          image-ref: ${{ vars.DOCKER_USERNAME }}/todo_list:latest
+        
+      - name: logout
+        run: |
+          docker logout
