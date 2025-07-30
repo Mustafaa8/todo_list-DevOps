@@ -36,7 +36,7 @@ jobs:
         with: 
           scan-type: image
           image-ref: ${{ vars.DOCKER_USERNAME }}/todo_list:latest
-        
+          severity: 'CRITICAL,HIGH'
       - name: logout
         run: |
           docker logout
