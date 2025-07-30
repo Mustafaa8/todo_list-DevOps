@@ -7,11 +7,24 @@ on:
     branches: [ "main" ]
 
 jobs:
-
+  hadolinting:
+    name: Linting docker image fule
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    - uses: hadolint/hadolint-action@54c9adbab1582c2ef04b2016b760714a4bfde3cf
+      with:
+        output-file: ~/results.txt
+    - uses: actions/upload-artifact@v4
+      with:
+        path: ~/results.txt
+        name: Linting Results
+        
   build:
     name: Building Docker Images
     runs-on: ubuntu-latest
-
+    needs: hadolinting
     steps:
     - uses: actions/checkout@v4
     - name: logging in
