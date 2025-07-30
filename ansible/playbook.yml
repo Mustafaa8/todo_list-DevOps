@@ -1,0 +1,62 @@
+- name: Docker Compose deployment
+  hosts: todo
+  become: true
+  vars_files:
+    - /home/mostafa/DevOps/todo_devops/ansible/vault_vars.yml
+  vars:
+    compose_path: /opt/app
+    compose_file: compose.yml
+  environment: 
+    mongoDbUrl: "{{mongoDbUrl}}"
+  tasks:
+    - name: Updating Packages
+      yum: 
+        name: "*"
+        state: latest
+    - name: Docker Prerequisites   
+      yum:
+        name:
+          - yum-utils
+          - device-mapper-persistent-data
+          - lvm2
+        state: present
+    - name: Adding Docker Registry
+      command: >
+        yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+      args:
+        creates: /etc/yum.repos.d/docker-ce.repo
+    - name: Installing Docker
+      yum:
+        name: docker-ce
+        state: present
+    - name: Start Docker
+      service:
+        name: docker
+        state: started
+        enabled: true
+    - name: Logging To Docker
+      community.docker.docker_login:
+        username: "{{ docker_username}}"
+        password: "{{ docker_password}}"
+        docker_host: "unix:///var/run/docker.sock"
+    - name: Create Path For Compose
+      file:
+        path: "{{ compose_path }}"
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+    - name: Copying Docker Compose
+      copy: 
+        src: /home/mostafa/DevOps/todo_devops/compose.yml
+        dest: "{{ compose_path }}/compose.yml"
+    - name: Starting Docker Compose 
+      community.docker.docker_compose_v2:
+        project_src: "{{ compose_path }}"
+        pull: always
+        recreate: always
+      register: output
+    - name: Show output
+      ansible.builtin.debug:
+        var: output
+    

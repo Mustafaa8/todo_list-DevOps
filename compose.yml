@@ -1,0 +1,27 @@
+services:
+  todo_app:
+    image: mostafaa8/todo_list
+    container_name: todo_list_app_container
+    restart: always
+    pull_policy: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4000/"]
+      interval: 30s          
+      timeout: 15s           
+      retries: 2           
+      start_period: 60s
+    environment:
+      mongoDbUrl: ${mongoDbUrl}
+    ports:
+      - "4000:4000"
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      WATCHTOWER_CLEANUP: true
+      WATCHTOWER_POLL_INTERVAL: 7200  
+      WATCHTOWER_INCLUDE_RESTARTING: true
+    restart: unless-stopped
