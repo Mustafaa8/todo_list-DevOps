@@ -14,10 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: linting Dockerfile
-      uses: hadolint/hadolint-action@v3.1.0
-      with:
-        dockerfile: ./Dockerfile
-        format:: tty
+      uses: tmknom/secure-hadolint-action@v0.4.2        
         
         
   build:
@@ -48,6 +45,7 @@ jobs:
       - name: scanning the Docker image
         uses: aquasecurity/trivy-action@dc5a429b52fcf669ce959baa2c2dd26090d2a6c4
         with: 
+          scan-type: image
           image-ref: ${{ vars.DOCKER_USERNAME }}/todo_list:latest
         
       - name: logout
