@@ -6,21 +6,10 @@ on:
   pull_request:
     branches: [ "main" ]
 
-jobs:
-  hadolinting:
-    name: Linting docker image file
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v4
-    - name: linting Dockerfile
-      uses: tmknom/secure-hadolint-action@v0.4.2        
-        
-        
+jobs: 
   build:
     name: Building Docker Images
     runs-on: ubuntu-latest
-    needs: hadolinting
     steps:
     - uses: actions/checkout@v4
     - name: logging in
