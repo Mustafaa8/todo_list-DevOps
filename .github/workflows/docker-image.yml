@@ -19,7 +19,7 @@ jobs:
         echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username ${{ vars.DOCKER_USERNAME }} --password-stdin 
     - name: Build the Docker image
       run: |
-        docker build . --file Dockerfile --tag ${{ vars.DOCKER_USERNAME }}/todo_list:$(date +%s) --push
+        docker build . --file Dockerfile --tag ${{ vars.DOCKER_USERNAME }}/todo_list:latest --push
         
     - name: logout
       run: |
